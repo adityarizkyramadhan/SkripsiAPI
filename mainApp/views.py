@@ -32,7 +32,7 @@ def user_list(request):
         email = user_data['email']
         existing_user = Users.objects.all().filter(email=email).first()
         if existing_user:
-                return JsonResponse({'email': email}, status=status.HTTP_200_OK)
+                return JsonResponse(UsersSerializer(existing_user).data, status=status.HTTP_200_OK)
         user_serializer = UsersSerializer(data=user_data)
         if user_serializer.is_valid():
             user_serializer.save()
@@ -44,7 +44,7 @@ def user_detail(request, id):
     try: 
         user = Users.objects.get(id=id) 
     except Users.DoesNotExist: 
-        return JsonResponse({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+        return JsonResponse({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
  
     if request.method == 'GET': 
         user_serializer = UsersSerializer(user) 
